@@ -1,9 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;
 
 public class Grid : MonoBehaviour
@@ -13,16 +11,30 @@ public class Grid : MonoBehaviour
     public float waterLevel = .4f;
     public float scale = .1f;
     public int size = 100;
+    
+    private int smallIslandThreshold = 10;
 
     private Cell[,] grid;
+    public TileBase s;
     
     // Start is called before the first frame update
     void Start()
     {
         GenerateNewMap();
-        DrawTerrainMesh(grid);
-        DrawEdgeMesh(grid);
-        DrawTexture(grid);
+        //DrawTerrainMesh(grid);
+        //DrawEdgeMesh(grid);
+        //DrawTexture(grid);
+        DrawTileMap();
+        
+        var visited = new bool[size, size];
+        for (int y = 0; y < size; y++)
+        {
+            for (int x = 0; x < size; x++)
+            {
+                if (grid[x, y].isWater) continue;
+                IsSmallIsland(x, y, visited);
+            }
+        }
     }
     
     void GenerateNewMap()
@@ -64,6 +76,19 @@ public class Grid : MonoBehaviour
         }
     }
 
+    void DrawTileMap()
+    {
+        Tilemap tilemap = gameObject.GetComponentInChildren<Tilemap>();
+        for (int y = 0; y < size; y++)
+        {
+            for (int x = 0; x < size; x++)
+            {
+                if (grid[x, y].isWater) continue;
+                tilemap.SetTile(new Vector3Int(x, y, 0), s);
+            }
+        }
+    }
+    
     void DrawTerrainMesh(Cell[,] grid)
     {
         Mesh mesh = new Mesh();
@@ -226,26 +251,44 @@ public class Grid : MonoBehaviour
         meshRenderer.material = terrainMaterial;
     }
     
-    private void OnDrawGizmos()
+    public bool IsSmallIsland(int startX, int startY, bool[,] visited)
     {
-        if (!Application.isPlaying) return;
-        for (int y = 0; y < size; y++)
+        // Check if the starting point is within the grid bounds
+        if (startX < 0 || startX >= size || startY < 0 || startY >= size)
         {
-            for (int x = 0; x < size; x++)
-            {
-                Cell cell = grid[x, y];
-                if (cell.isWater)
-                {
-                    Gizmos.color = Color.blue;
-                }
-                else
-                {
-                    Gizmos.color = Color.green;
-                }
-
-                Vector3 pos = new Vector3(x, y, 0);
-                Gizmos.DrawCube(pos, Vector3.one);
-            }
+            throw new ArgumentException("Invalid starting point coordinates");
         }
+
+        if (grid[startX, startY].isWater)
+        {
+            return false;
+        }
+
+        // Use depth-first search to traverse the island and count its size
+        int islandSize = CountIslandSize(startX, startY, visited);
+        Debug.Log(islandSize);
+        
+        return islandSize < smallIslandThreshold;
+    }
+    
+    private int CountIslandSize(int x, int y, bool[,] visited)
+    {
+        // Check if the current position is out of bounds or has already been visited
+        if (x < 0 || x >= size || y < 0 || y >= size || visited[x, y] || grid[x, y].isWater)
+        {
+            return 0;
+        }
+
+        // Mark the current cell as visited
+        visited[x, y] = true;
+
+        // Recursively count the size of the island by checking neighboring cells
+        int islandSize = 1 +
+                   CountIslandSize(x + 1, y, visited) +
+                   CountIslandSize(x - 1, y, visited) +
+                   CountIslandSize(x, y + 1, visited) +
+                   CountIslandSize(x, y - 1, visited);
+
+        return islandSize;
     }
 }
