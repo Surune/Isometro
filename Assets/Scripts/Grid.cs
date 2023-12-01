@@ -13,7 +13,8 @@ public class Grid : MonoBehaviour
     private int smallIslandThreshold = 10;
 
     private Cell[,] grid;
-    public RuleTile tile;
+    public RuleTile groundRuleTile;
+    public TileBase oceanTile;
     
     // Start is called before the first frame update
     void Start()
@@ -51,8 +52,8 @@ public class Grid : MonoBehaviour
         {
             for (int x = 0; x < size; x++)
             {
-                float xv = x / (float)size*2-1;
-                float yv = y / (float)size*2-1;
+                float xv = x / (float)size * 2 - 1;
+                float yv = y / (float)size * 2 - 1;
                 float v = Mathf.Max(Mathf.Abs(xv), Mathf.Abs(yv));
                 fallOffMap[x, y] = Mathf.Pow(v, 3f) / (Mathf.Pow(v, 3f) + Mathf.Pow(2.2f - 2.2f * v, 3f));
             }
@@ -73,15 +74,31 @@ public class Grid : MonoBehaviour
 
     void DrawTileMap()
     {
-        Tilemap tilemap = gameObject.GetComponentInChildren<Tilemap>();
+        Tilemap tilemapGround = transform.GetChild(0).GetComponent<Tilemap>();
+        Tilemap tilemapOcean = transform.GetChild(1).GetComponent<Tilemap>();
         for (int y = 0; y < size; y++)
         {
             for (int x = 0; x < size; x++)
             {
-                if (grid[x, y].isWater) continue;
-                tilemap.SetTile(new Vector3Int(x, y, 0), tile);
+                if (grid[x, y].isWater)
+                {
+                    tilemapOcean.SetTile(new Vector3Int(x, y, 0), oceanTile);
+                }
+                else
+                {
+                    tilemapGround.SetTile(new Vector3Int(x, y, 0), groundRuleTile);
+                }
             }
         }
+        
+        RefreshCollider(tilemapOcean);
+    }
+    
+    void RefreshCollider (Tilemap tilemap) {
+        // Update the tilemap collider by disabling and enabling the TilemapCollider2D component.
+        // This is the only solution I found to refresh it during runtime.
+        tilemap.gameObject.GetComponent<TilemapCollider2D>().enabled = false;
+        tilemap.gameObject.GetComponent<TilemapCollider2D>().enabled = true;
     }
 
     bool IsWater(int x, int y)
