@@ -230,7 +230,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 100
+  orthographic size: 50
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -273,7 +273,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: deb4437f610c641488adb3a6027331e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  delayFrame: 60
+  offset: {x: 0, y: 0, z: -10}
+  smoothSpeed: 10
 --- !u!1 &531540758
 GameObject:
   m_ObjectHideFlags: 0
@@ -368,7 +369,7 @@ Grid:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 624160802}
   m_Enabled: 1
-  m_CellSize: {x: 8, y: 8, z: 8}
+  m_CellSize: {x: 4, y: 4, z: 1}
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 0
   m_CellSwizzle: 0
@@ -381,7 +382,7 @@ Transform:
   m_GameObject: {fileID: 624160802}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -400, y: -400, z: 0}
+  m_LocalPosition: {x: -200, y: -200, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -401,7 +402,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa8e7880358ac4d84980562784fa6737, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waterLevel: 0.35
+  waterLevel: 0.33
   scale: 0.1
   size: 100
   groundRuleTile: {fileID: 11400000, guid: f1cf8260789a743978f710e790f3f773, type: 2}
@@ -713,7 +714,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -732494481, guid: 9b405846c9ad44b7d806622febcf985a, type: 3}
+  m_Sprite: {fileID: -560680976, guid: 50cb0238f993247e2a0dc94e26856b3c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -764,6 +765,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 70
+  idleSprite: {fileID: -560680976, guid: 50cb0238f993247e2a0dc94e26856b3c, type: 3}
+  upSprite: {fileID: -1199606091, guid: 50cb0238f993247e2a0dc94e26856b3c, type: 3}
+  downSprite: {fileID: -560680976, guid: 50cb0238f993247e2a0dc94e26856b3c, type: 3}
+  leftSprite: {fileID: -1034052456, guid: 50cb0238f993247e2a0dc94e26856b3c, type: 3}
+  rightSprite: {fileID: 1861390086, guid: 50cb0238f993247e2a0dc94e26856b3c, type: 3}
 --- !u!61 &1822633030
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -800,14 +806,14 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 8, y: 8}
+    oldSize: {x: 4, y: 4}
     newSize: {x: 8, y: 8}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 8, y: 8}
+  m_Size: {x: 4, y: 4}
   m_EdgeRadius: 0
 --- !u!1 &1827805709
 GameObject:
