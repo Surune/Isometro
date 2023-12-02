@@ -1,36 +1,68 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;
 
 public class Grid : MonoBehaviour
 {
-    public float waterLevel = .4f;
+    public float waterLevel = .35f;
     public float scale = .1f;
     public int size = 100;
-    
-    private int smallIslandThreshold = 10;
+
+    private GameObject player;
+    private List<List<Cell>> islands;
 
     private Cell[,] grid;
     public RuleTile groundRuleTile;
     public TileBase oceanTile;
+    public TileBase rockTile;
+    public TileBase sandTile;
+    public TileBase sandTile2;
     
     // Start is called before the first frame update
     void Start()
     {
+        player = GameObject.Find("Player");
+        InvokeRepeating("SpawnNewMap", 0f, 5f);
+    }
+
+    void SpawnNewMap()
+    {
         GenerateNewMap();
         DrawTileMap();
         
-        var visited = new bool[size, size];
+        bool[,] visited = new bool[size, size];
+        islands = new List<List<Cell>>();
+        
         for (int y = 0; y < size; y++)
         {
             for (int x = 0; x < size; x++)
             {
                 if (grid[x, y].isWater) continue;
-                IsSmallIsland(x, y, visited);
+                
+                List<Cell> island = new List<Cell>();
+                CheckIsland(x, y, visited, island);
+                if (island.Count > 0)
+                {
+                    islands.Add(island);
+                }
             }
         }
+        
+        islands.Sort((x, y) => y.Count.CompareTo(x.Count));
+        
+        SpawnPlayerOnLargestIsland();
+    }
+
+    void SpawnPlayerOnLargestIsland()
+    {
+        var largestIsland = islands.ElementAt(0);
+        var centerOfLargestIsland = largestIsland.ElementAt(largestIsland.Count / 3);
+        Debug.Log(centerOfLargestIsland.x + " " + centerOfLargestIsland.y);
+        player.transform.position = new Vector3(centerOfLargestIsland.x * 4 - 200 + 2, centerOfLargestIsland.y * 4 - 200 + 2, 0);
     }
     
     void GenerateNewMap()
@@ -38,20 +70,16 @@ public class Grid : MonoBehaviour
         float[,] noiseMap = new float[size, size];
         float xOffset = Random.Range(-10000f, 10000f);
         float yOffset = Random.Range(-10000f, 10000f);
+        
+        float[,] fallOffMap = new float[size, size];
+        
         for (int y = 0; y < size; y++)
         {
             for (int x = 0; x < size; x++)
             {
                 float noiseValue = Mathf.PerlinNoise(x * scale + xOffset, y * scale + yOffset);
                 noiseMap[x, y] = noiseValue;
-            }
-        }
-
-        float[,] fallOffMap = new float[size, size];
-        for (int y = 0; y < size; y++)
-        {
-            for (int x = 0; x < size; x++)
-            {
+                
                 float xv = x / (float)size * 2 - 1;
                 float yv = y / (float)size * 2 - 1;
                 float v = Mathf.Max(Mathf.Abs(xv), Mathf.Abs(yv));
@@ -64,7 +92,7 @@ public class Grid : MonoBehaviour
         {
             for (int x = 0; x < size; x++)
             {
-                Cell cell = new Cell();
+                Cell cell = new Cell(x, y);
                 float noiseValue = noiseMap[x, y] - fallOffMap[x, y];
                 cell.isWater = noiseValue < waterLevel;
                 grid[x, y] = cell;
@@ -76,6 +104,12 @@ public class Grid : MonoBehaviour
     {
         Tilemap tilemapGround = transform.GetChild(0).GetComponent<Tilemap>();
         Tilemap tilemapOcean = transform.GetChild(1).GetComponent<Tilemap>();
+        Tilemap tilemapForeground = transform.GetChild(2).GetComponent<Tilemap>();
+        
+        tilemapGround.ClearAllTiles();
+        tilemapOcean.ClearAllTiles();
+        tilemapForeground.ClearAllTiles();
+        
         for (int y = 0; y < size; y++)
         {
             for (int x = 0; x < size; x++)
@@ -87,64 +121,55 @@ public class Grid : MonoBehaviour
                 else
                 {
                     tilemapGround.SetTile(new Vector3Int(x, y, 0), groundRuleTile);
+                    if (IsInnerGround(x, y) && Random.Range(-10000f, 10000f) > 9500f)
+                    {
+                        tilemapForeground.SetTile(new Vector3Int(x, y, 0), rockTile); 
+                    }
+                    if (IsInnerGround(x, y) && Random.Range(-10000f, 10000f) > 9000f)
+                    {
+                        tilemapForeground.SetTile(new Vector3Int(x, y, 0), sandTile); 
+                    }
+                    if (IsInnerGround(x, y) && Random.Range(-10000f, 10000f) > 9000f)
+                    {
+                        tilemapForeground.SetTile(new Vector3Int(x, y, 0), sandTile2); 
+                    }
                 }
             }
         }
-        
-        RefreshCollider(tilemapOcean);
-    }
-    
-    void RefreshCollider (Tilemap tilemap) {
-        // Update the tilemap collider by disabling and enabling the TilemapCollider2D component.
-        // This is the only solution I found to refresh it during runtime.
-        tilemap.gameObject.GetComponent<TilemapCollider2D>().enabled = false;
-        tilemap.gameObject.GetComponent<TilemapCollider2D>().enabled = true;
     }
 
-    bool IsWater(int x, int y)
+    private bool IsWater(int x, int y)
     {
-        // Check if the given cell is water (out of bounds cells are considered water)
-        return x < 0 || x >= size || y < 0 || y >= size || grid[y, x].isWater;
-    }
-    
-    public bool IsSmallIsland(int startX, int startY, bool[,] visited)
-    {
-        // Check if the starting point is within the grid bounds
-        if (startX < 0 || startX >= size || startY < 0 || startY >= size)
+        if (x < 0 || x >= size || y < 0 || y >= size)
         {
-            throw new ArgumentException("Invalid starting point coordinates");
+            return true;
         }
 
-        if (grid[startX, startY].isWater)
-        {
-            return false;
-        }
-
-        // Use depth-first search to traverse the island and count its size
-        int islandSize = CountIslandSize(startX, startY, visited);
-        Debug.Log(islandSize);
-        
-        return islandSize < smallIslandThreshold;
+        return grid[x, y].isWater;
     }
     
-    private int CountIslandSize(int x, int y, bool[,] visited)
+    private bool IsInnerGround(int x, int y)
+    {
+        return !(IsWater(x - 1, y) || IsWater(x + 1, y) || IsWater(x, y - 1) || IsWater(x, y + 1)
+                 || IsWater(x - 1, y - 1) || IsWater(x - 1, y + 1) || IsWater(x + 1, y - 1) || IsWater(x + 1, y + 1));
+    }
+    
+    private void CheckIsland(int x, int y, bool[,] visited, List<Cell> island)
     {
         // Check if the current position is out of bounds or has already been visited
-        if (x < 0 || x >= size || y < 0 || y >= size || visited[x, y] || grid[x, y].isWater)
+        if (IsWater(x, y) || visited[x, y])
         {
-            return 0;
+            return;
         }
 
         // Mark the current cell as visited
         visited[x, y] = true;
-
+        island.Add(grid[x, y]);
+        
         // Recursively count the size of the island by checking neighboring cells
-        int islandSize = 1 +
-                   CountIslandSize(x + 1, y, visited) +
-                   CountIslandSize(x - 1, y, visited) +
-                   CountIslandSize(x, y + 1, visited) +
-                   CountIslandSize(x, y - 1, visited);
-
-        return islandSize;
+        CheckIsland(x + 1, y, visited, island);
+        CheckIsland(x - 1, y, visited, island);
+        CheckIsland(x, y + 1, visited, island);
+        CheckIsland(x, y - 1, visited, island);
     }
 }
