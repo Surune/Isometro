@@ -13,10 +13,21 @@ public class PlayerMovement : MonoBehaviour
     public Sprite leftSprite;  // Sprite when moving left
     public Sprite rightSprite; // Sprite when moving right
 
+    [Header("Dashing")] 
+    [SerializeField] private float dashSpeed = 100f;
+    [SerializeField] private float dashTime = 0.5f;
+    private Vector2 dashDirection;
+    private bool isDashing;
+    private bool canDash;
+    private TrailRenderer dashTrailer;
+    
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        dashTrailer = GetComponent<TrailRenderer>();
+        dashTrailer.emitting = false;
+        canDash = true;
     }
 
     void Update()
@@ -24,6 +35,22 @@ public class PlayerMovement : MonoBehaviour
         // Get input from the player
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
+        bool dashInput = Input.GetButtonDown("Jump");
+
+        if (dashInput && canDash)
+        {
+            isDashing = true;
+            canDash = false;
+            dashDirection = new Vector2(horizontalInput, verticalInput);
+            dashTrailer.emitting = true;
+            StartCoroutine(StopDash());
+        }
+
+        if (isDashing)
+        {
+            rb.velocity = dashDirection.normalized * dashSpeed;
+            return;
+        }
 
         // Calculate movement direction
         Vector2 movement = new Vector2(horizontalInput, verticalInput);
@@ -34,6 +61,14 @@ public class PlayerMovement : MonoBehaviour
         // Move the character
         rb.velocity = movement * moveSpeed;
         SetSprite(movement);
+    }
+
+    private IEnumerator StopDash()
+    {
+        yield return new WaitForSeconds(dashTime);
+        isDashing = false;
+        canDash = true;
+        dashTrailer.emitting = false;
     }
     
     void SetSprite(Vector2 movement)
