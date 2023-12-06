@@ -36,7 +36,18 @@ public class PlayerMovement : MonoBehaviour
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
         bool dashInput = Input.GetButtonDown("Jump");
+        bool leftAttackInput = Input.GetKeyDown(KeyCode.Q);
+        bool rightAttackInput = Input.GetKeyDown(KeyCode.E);
 
+        if (leftAttackInput)
+        {
+            transform.GetChild(0).GetComponent<Animator>().SetTrigger("Attack");
+        }
+        if (rightAttackInput)
+        {
+            transform.GetChild(1).GetComponent<Animator>().SetTrigger("Attack");
+        }
+        
         if (dashInput && canDash)
         {
             isDashing = true;
