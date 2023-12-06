@@ -60,9 +60,17 @@ public class Grid : MonoBehaviour
     void SpawnPlayerOnLargestIsland()
     {
         var largestIsland = islands.ElementAt(0);
-        var centerOfLargestIsland = largestIsland.ElementAt(largestIsland.Count / 3);
-        Debug.Log(centerOfLargestIsland.x + " " + centerOfLargestIsland.y);
-        player.transform.position = new Vector3(centerOfLargestIsland.x * 4 - 200 + 2, centerOfLargestIsland.y * 4 - 200 + 2, 0);
+        var innerGround = new List<Cell>();
+        foreach (Cell c in largestIsland)
+        {
+            if (IsInnerGround(c.x, c.y))
+            {
+                innerGround.Add(grid[c.x, c.y]);
+            }
+        }
+        var spawnPoint = innerGround.ElementAt(largestIsland.Count / 2);
+        Debug.Log(spawnPoint.x + " " + spawnPoint.y);
+        player.transform.position = new Vector3(spawnPoint.x * 4 - 198, spawnPoint.y * 4 - 198, 0);
     }
     
     void GenerateNewMap()
