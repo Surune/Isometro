@@ -16,7 +16,8 @@ public class SpawnNotifier : MonoBehaviour
         if (accumulatedTime > spawnDelay)
         {
             Instantiate(enemyPrefab, transform.position, Quaternion.identity);
-            Destroy(gameObject);
+            accumulatedTime = 0f;
+            //Destroy(gameObject);
         }
     }
 }

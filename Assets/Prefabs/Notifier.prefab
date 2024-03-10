@@ -35,8 +35,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 14.937862, y: -5.0697556}
-  m_SizeDelta: {x: 4, y: 4}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 80, y: 4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &5705957944403148057
 MonoBehaviour:
@@ -50,7 +50,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7d62426bfb5240d4b8c11cedd807c47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 0}
+  enemyPrefab: {fileID: 6701985441700302772, guid: 7b956eebf7e1440febcc1dde524a8664, type: 3}
   timer: {fileID: 3340198820391889542}
 --- !u!222 &8062353359729033133
 CanvasRenderer:
