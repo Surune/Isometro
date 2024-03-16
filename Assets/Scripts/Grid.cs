@@ -26,6 +26,7 @@ public class Grid : MonoBehaviour
     void Start()
     {
         player = GameObject.Find("Player");
+        SpawnNewMap();
         //InvokeRepeating("SpawnNewMap", 0f, 5f);
     }
 

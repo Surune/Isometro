@@ -63,15 +63,15 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
-        // Calculate movement direction
-        Vector2 movement = new Vector2(horizontalInput, verticalInput);
+        // // Calculate movement direction
+        // Vector2 movement = new Vector2(horizontalInput, verticalInput);
 
-        // Normalize the movement vector to ensure consistent speed in all directions
-        movement.Normalize();
+        // // Normalize the movement vector to ensure consistent speed in all directions
+        // movement.Normalize();
 
-        // Move the character
-        rb.velocity = movement * moveSpeed;
-        SetSprite(movement);
+        // // Move the character
+        // rb.velocity = movement * moveSpeed;
+        //SetSprite(movement);
     }
 
     private IEnumerator StopDash()
