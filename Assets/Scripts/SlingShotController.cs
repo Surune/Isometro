@@ -19,16 +19,15 @@ public class SlingShotController : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            startPoint = player.position;
+            startPoint = GetMouseWorldPosition();
             pressedTime = Time.time;
             lineRenderer.SetPosition(0, player.position);
-            lineRenderer.SetPosition(1, GetMouseWorldPosition());
             lineRenderer.enabled = true;
         }
 
         if (Input.GetMouseButton(0))
         {
-            lineRenderer.SetPosition(1, GetMouseWorldPosition());
+            lineRenderer.SetPosition(1, GetMouseWorldPosition()-startPoint+(Vector2)player.position);
         }
 
         if (Input.GetMouseButtonUp(0))
@@ -42,7 +41,7 @@ public class SlingShotController : MonoBehaviour
         player.position = Vector2.MoveTowards(player.position, endPoint, Time.deltaTime * power * projectileSpeed);
     }
 
-    Vector3 GetMouseWorldPosition()
+    Vector2 GetMouseWorldPosition()
     {
         return (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition);
     }
