@@ -16,7 +16,7 @@ public class Grid : MonoBehaviour
     private List<List<Cell>> islands;
 
     private Cell[,] grid;
-    public RuleTile groundRuleTile;
+    public TileBase groundRuleTile;
     public TileBase oceanTile;
     public TileBase rockTile;
     public TileBase sandTile;
@@ -132,15 +132,15 @@ public class Grid : MonoBehaviour
                     tilemapGround.SetTile(new Vector3Int(x, y, 0), groundRuleTile);
                     if (IsInnerGround(x, y) && Random.Range(-10000f, 10000f) > 9500f)
                     {
-                        tilemapForeground.SetTile(new Vector3Int(x, y, 0), rockTile); 
+                        //tilemapForeground.SetTile(new Vector3Int(x, y, 0), rockTile); 
                     }
                     if (IsInnerGround(x, y) && Random.Range(-10000f, 10000f) > 9000f)
                     {
-                        tilemapForeground.SetTile(new Vector3Int(x, y, 0), sandTile); 
+                        //tilemapForeground.SetTile(new Vector3Int(x, y, 0), sandTile); 
                     }
                     if (IsInnerGround(x, y) && Random.Range(-10000f, 10000f) > 9000f)
                     {
-                        tilemapForeground.SetTile(new Vector3Int(x, y, 0), sandTile2); 
+                        //tilemapForeground.SetTile(new Vector3Int(x, y, 0), sandTile2); 
                     }
                 }
             }

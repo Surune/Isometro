@@ -190,12 +190,12 @@ MonoBehaviour:
   m_RequiresColorTexture: 0
   m_Version: 2
   m_TaaSettings:
-    quality: 3
-    frameInfluence: 0.1
-    jitterScale: 1
-    mipBias: 0
-    varianceClampScale: 0.9
-    contrastAdaptiveSharpening: 0
+    m_Quality: 3
+    m_FrameInfluence: 0.1
+    m_JitterScale: 1
+    m_MipBias: 0
+    m_VarianceClampScale: 0.9
+    m_ContrastAdaptiveSharpening: 0
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -231,7 +231,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 50
+  orthographic size: 10
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -269,7 +269,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: deb4437f610c641488adb3a6027331e1, type: 3}
   m_Name: 
@@ -283,7 +283,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e2a3f2ff7c0604a779e5aca8cbe86a93, type: 3}
   m_Name: 
@@ -386,9 +386,9 @@ Grid:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 624160802}
   m_Enabled: 1
-  m_CellSize: {x: 4, y: 4, z: 1}
+  m_CellSize: {x: 1, y: 0.5, z: 1}
   m_CellGap: {x: 0, y: 0, z: 0}
-  m_CellLayout: 0
+  m_CellLayout: 2
   m_CellSwizzle: 0
 --- !u!224 &624160804
 RectTransform:
@@ -402,15 +402,15 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1083640524}
   - {fileID: 1827805710}
+  - {fileID: 1083640524}
   - {fileID: 1360371205}
   - {fileID: 831041203}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -200, y: -200}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &624160805
@@ -425,14 +425,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa8e7880358ac4d84980562784fa6737, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waterLevel: 0.3
+  waterLevel: 0.1
   scale: 0.1
   size: 100
-  groundRuleTile: {fileID: 11400000, guid: f1cf8260789a743978f710e790f3f773, type: 2}
-  oceanTile: {fileID: 11400000, guid: 703dc33fc50d24a9f9af23631da005e4, type: 2}
-  rockTile: {fileID: 11400000, guid: f3806394b160441dfb9abe5d803a5f23, type: 2}
-  sandTile: {fileID: 11400000, guid: 909128ddc8819413fb2a271f4965bcfa, type: 2}
-  sandTile2: {fileID: 11400000, guid: 7a09e878d7b0b4822aa42393094acf4e, type: 2}
+  groundRuleTile: {fileID: 11400000, guid: 36a26d90dcbbd40cfbf6fccd6637d57c, type: 2}
+  oceanTile: {fileID: 11400000, guid: 857b760a3b7b6486cbf93b86412a4e38, type: 2}
+  rockTile: {fileID: 11400000, guid: 35fcf4d320baa41c7ab78ca2613a2ff8, type: 2}
+  sandTile: {fileID: 11400000, guid: 8c20431777bf54b4c80fd15f3de4fd28, type: 2}
+  sandTile2: {fileID: 11400000, guid: 2654940b6b51648e7a21628fe864fe7a, type: 2}
 --- !u!223 &624160806
 Canvas:
   m_ObjectHideFlags: 0
@@ -571,7 +571,7 @@ TilemapRenderer:
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
   m_MaxChunkCount: 16
   m_MaxFrameAge: 16
-  m_SortOrder: 0
+  m_SortOrder: 3
   m_Mode: 0
   m_DetectChunkCullingBounds: 0
   m_MaskInteraction: 0
@@ -905,7 +905,7 @@ TilemapRenderer:
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
   m_MaxChunkCount: 16
   m_MaxFrameAge: 16
-  m_SortOrder: 0
+  m_SortOrder: 3
   m_Mode: 0
   m_DetectChunkCullingBounds: 0
   m_MaskInteraction: 0
@@ -1053,8 +1053,8 @@ Transform:
   m_GameObject: {fileID: 1822633025}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 200, y: 200, z: 90}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.2, y: 0.2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1936440017}
@@ -1147,7 +1147,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1822633025}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c18349eef514d4098b40befd9aaca0ef, type: 3}
   m_Name: 
@@ -1167,7 +1167,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1822633025}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -1566,7 +1566,7 @@ TilemapRenderer:
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
   m_MaxChunkCount: 16
   m_MaxFrameAge: 16
-  m_SortOrder: 0
+  m_SortOrder: 3
   m_Mode: 0
   m_DetectChunkCullingBounds: 0
   m_MaskInteraction: 0
