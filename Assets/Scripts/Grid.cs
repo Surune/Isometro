@@ -70,7 +70,6 @@ public class Grid : MonoBehaviour
             }
         }
         var spawnPoint = innerGround.ElementAt(largestIsland.Count / 2);
-        Debug.Log(spawnPoint.x + " " + spawnPoint.y);
         player.transform.position = new Vector3(spawnPoint.x * 4 - 198, spawnPoint.y * 4 - 198, 0);
     }
     
@@ -180,5 +179,23 @@ public class Grid : MonoBehaviour
         CheckIsland(x - 1, y, visited, island);
         CheckIsland(x, y + 1, visited, island);
         CheckIsland(x, y - 1, visited, island);
+    }
+    
+    void Update()
+    {
+        if (Input.GetMouseButton(0))  // 왼쪽 클릭
+        {
+            var tilemap = transform.GetChild(0).GetComponent<Tilemap>();
+
+            Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector3Int cellPos = tilemap.WorldToCell(mouseWorldPos);
+            var cellPosition = new Vector3Int(cellPos.x, cellPos.y, 0);
+            TileBase currentTile = tilemap.GetTile(cellPosition);
+            if (currentTile != null)
+            {
+                tilemap.SetTile(cellPosition, sandTile);  // 해당 위치에 타일 교체
+                Debug.Log($"타일 교체됨: {cellPosition}");
+            }
+        }
     }
 }

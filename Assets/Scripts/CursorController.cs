@@ -1,16 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class CursorController : MonoBehaviour
 {
-    public Sprite cursorSprite;
-    public CursorMode cursorMode = CursorMode.Auto;
-    public Vector2 hotSpot = Vector2.zero;
-    
-    // Start is called before the first frame update
+    public Tilemap tilemap;           // 대상 타일맵
+    public Transform selectorObject;  // 따라다닐 셀렉터 오브젝트
+
     void Start()
     {
-        Cursor.SetCursor(cursorSprite.texture, hotSpot, cursorMode);
+        Cursor.visible = false;
+    }
+    
+    void Update()
+    {
+        Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector3Int cellPos = tilemap.WorldToCell(mouseWorldPos);
+        var cellPosition = new Vector3Int(cellPos.x, cellPos.y, 0);
+        
+        // 셀 좌표 → 셀의 중앙 월드 좌표
+        Vector3 cellCenterWorld = tilemap.GetCellCenterWorld(cellPosition);
+
+        selectorObject.position = cellCenterWorld;
     }
 }
