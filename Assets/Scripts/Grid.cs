@@ -18,9 +18,7 @@ public class Grid : MonoBehaviour
     private Cell[,] grid;
     public TileBase groundRuleTile;
     public TileBase oceanTile;
-    public TileBase rockTile;
-    public TileBase sandTile;
-    public TileBase sandTile2;
+    public TileBase roadTile;
     
     // Start is called before the first frame update
     void Start()
@@ -70,7 +68,7 @@ public class Grid : MonoBehaviour
             }
         }
         var spawnPoint = innerGround.ElementAt(largestIsland.Count / 2);
-        player.transform.position = new Vector3(spawnPoint.x * 4 - 198, spawnPoint.y * 4 - 198, 0);
+        // player.transform.position = new Vector3(spawnPoint.x * 4 - 198, spawnPoint.y * 4 - 198, 0);
     }
     
     void GenerateNewMap()
@@ -129,18 +127,6 @@ public class Grid : MonoBehaviour
                 else
                 {
                     tilemapGround.SetTile(new Vector3Int(x, y, 0), groundRuleTile);
-                    if (IsInnerGround(x, y) && Random.Range(-10000f, 10000f) > 9500f)
-                    {
-                        //tilemapForeground.SetTile(new Vector3Int(x, y, 0), rockTile); 
-                    }
-                    if (IsInnerGround(x, y) && Random.Range(-10000f, 10000f) > 9000f)
-                    {
-                        //tilemapForeground.SetTile(new Vector3Int(x, y, 0), sandTile); 
-                    }
-                    if (IsInnerGround(x, y) && Random.Range(-10000f, 10000f) > 9000f)
-                    {
-                        //tilemapForeground.SetTile(new Vector3Int(x, y, 0), sandTile2); 
-                    }
                 }
             }
         }
@@ -193,7 +179,7 @@ public class Grid : MonoBehaviour
             TileBase currentTile = tilemap.GetTile(cellPosition);
             if (currentTile != null)
             {
-                tilemap.SetTile(cellPosition, sandTile);  // 해당 위치에 타일 교체
+                tilemap.SetTile(cellPosition, roadTile);  // 해당 위치에 타일 교체
                 Debug.Log($"타일 교체됨: {cellPosition}");
             }
         }

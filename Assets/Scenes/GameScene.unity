@@ -385,7 +385,7 @@ Grid:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 624160802}
   m_Enabled: 1
-  m_CellSize: {x: 1, y: 0.5, z: 1}
+  m_CellSize: {x: 2, y: 1, z: 1}
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 2
   m_CellSwizzle: 0
@@ -426,11 +426,9 @@ MonoBehaviour:
   waterLevel: 0.1
   scale: 0.1
   size: 100
-  groundRuleTile: {fileID: 11400000, guid: 36a26d90dcbbd40cfbf6fccd6637d57c, type: 2}
+  groundRuleTile: {fileID: 11400000, guid: fc2f4ba468c84432d8c2dca0780e92a4, type: 2}
   oceanTile: {fileID: 11400000, guid: 857b760a3b7b6486cbf93b86412a4e38, type: 2}
-  rockTile: {fileID: 11400000, guid: 35fcf4d320baa41c7ab78ca2613a2ff8, type: 2}
-  sandTile: {fileID: 11400000, guid: 8c20431777bf54b4c80fd15f3de4fd28, type: 2}
-  sandTile2: {fileID: 11400000, guid: 2654940b6b51648e7a21628fe864fe7a, type: 2}
+  roadTile: {fileID: 11400000, guid: 8c417e7617a97441e99956dfb29eb7af, type: 2}
 --- !u!223 &624160806
 Canvas:
   m_ObjectHideFlags: 0
@@ -840,7 +838,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1, y: 1}
+  m_SizeDelta: {x: 2, y: 2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1385758304
 MonoBehaviour:
