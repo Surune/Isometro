@@ -59,7 +59,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (isDashing)
         {
-            rb.velocity = dashDirection.normalized * dashSpeed;
+            rb.linearVelocity = dashDirection.normalized * dashSpeed;
             return;
         }
 
